@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DerivEdge Pro — Smart Trading Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Animated background -->
+<div class="bg-grid"></div>
+<div class="bg-glow glow-1"></div>
+<div class="bg-glow glow-2"></div>
+
+<!-- SIDEBAR NAV -->
+<nav class="sidebar" id="sidebar">
+  <div class="logo">
+    <span class="logo-icon">⬡</span>
+    <span class="logo-text">DerivEdge<span class="logo-accent">Pro</span></span>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">ANALYSIS</span>
+    <a href="#" class="nav-item active" data-page="dashboard"><span class="nav-icon">◈</span>Dashboard</a>
+    <a href="#" class="nav-item" data-page="rise-fall"><span class="nav-icon">↑↓</span>Rise / Fall</a>
+    <a href="#" class="nav-item" data-page="even-odd"><span class="nav-icon">⊕</span>Even / Odd</a>
+    <a href="#" class="nav-item" data-page="over-under"><span class="nav-icon">⊷</span>Over / Under</a>
+    <a href="#" class="nav-item" data-page="matches-differs"><span class="nav-icon">≈</span>Matches / Differs</a>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">BOTS</span>
+    <a href="#" class="nav-item" data-page="dbot"><span class="nav-icon">⚡</span>DBOT Strategies</a>
+    <a href="#" class="nav-item" data-page="bot-analysis"><span class="nav-icon">◉</span>Bot Analysis</a>
+  </div>
+  <div class="nav-section">
+    <span class="nav-label">TOOLS</span>
+    <a href="#" class="nav-item" data-page="digit-tracker"><span class="nav-icon">◻</span>Digit Tracker</a>
+    <a href="#" class="nav-item" data-page="greenlight"><span class="nav-icon">◍</span>Green Light System</a>
+    <a href="#" class="nav-item" data-page="journal"><span class="nav-icon">▦</span>Trade Journal</a>
+    <a href="tools.html" class="nav-item" target="_blank"><span class="nav-icon">⚙</span>Tools & Scripts</a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="market-badge" id="market-status">
+      <span class="status-dot"></span>
+      <span>Markets Open</span>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main" id="main-content">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="menu-btn" id="menu-toggle">☰</button>
+    <div class="topbar-center">
+      <div class="market-ticker" id="ticker-strip">
+        <span class="ticker-item">V10 <span class="tick-val" id="v10-val">—</span></span>
+        <span class="ticker-sep">|</span>
+        <span class="ticker-item">V25 <span class="tick-val" id="v25-val">—</span></span>
+        <span class="ticker-sep">|</span>
+        <span class="ticker-item">V50 <span class="tick-val" id="v50-val">—</span></span>
+        <span class="ticker-sep">|</span>
+        <span class="ticker-item">V75 <span class="tick-val" id="v75-val">—</span></span>
+        <span class="ticker-sep">|</span>
+        <span class="ticker-item">V100 <span class="tick-val" id="v100-val">—</span></span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="utc-clock" id="utc-clock">--:--:-- UTC</span>
+    </div>
+  </header>
+
+  <!-- PAGES -->
+  <div class="page-container">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1 class="page-title">Trading <span class="accent">Intelligence</span></h1>
+        <p class="page-sub">Real-time signal analysis across all Deriv synthetic markets</p>
+      </div>
+
+      <!-- Market Overview Cards -->
+      <div class="grid-4">
+        <div class="card card-glow" id="dash-v10">
+          <div class="card-label">Volatility 10</div>
+          <div class="card-value" id="dv10">—</div>
+          <div class="card-signal" id="ds10">Calculating...</div>
+          <div class="card-bar"><div class="bar-fill" id="db10" style="width:50%"></div></div>
+        </div>
+        <div class="card card-glow" id="dash-v25">
+          <div class="card-label">Volatility 25</div>
+          <div class="card-value" id="dv25">—</div>
+          <div class="card-signal" id="ds25">Calculating...</div>
+          <div class="card-bar"><div class="bar-fill" id="db25" style="width:50%"></div></div>
+        </div>
+        <div class="card card-glow" id="dash-v75">
+          <div class="card-label">Volatility 75</div>
+          <div class="card-value" id="dv75">—</div>
+          <div class="card-signal" id="ds75">Calculating...</div>
+          <div class="card-bar"><div class="bar-fill" id="db75" style="width:50%"></div></div>
+        </div>
+        <div class="card card-glow" id="dash-v100">
+          <div class="card-label">Volatility 100</div>
+          <div class="card-value" id="dv100">—</div>
+          <div class="card-signal" id="ds100">Calculating...</div>
+          <div class="card-bar"><div class="bar-fill" id="db100" style="width:50%"></div></div>
+        </div>
+      </div>
+
+      <!-- Live Signals Table -->
+      <div class="section-title">⚡ Live Signal Matrix</div>
+      <div class="signal-matrix">
+        <table class="signal-table">
+          <thead>
+            <tr>
+              <th>Market</th>
+              <th>RSI(14)</th>
+              <th>Trend</th>
+              <th>Momentum</th>
+              <th>Rise/Fall</th>
+              <th>Even/Odd</th>
+              <th>Over/Under</th>
+              <th>Greenlight</th>
+            </tr>
+          </thead>
+          <tbody id="signal-tbody">
+            <tr><td colspan="8" class="loading-row">Connecting to Deriv WebSocket...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Digit Distribution -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Last Digit Distribution <span class="tag">V75 • Last 100 Ticks</span></div>
+          <div class="digit-chart" id="digit-chart-v75">
+            <div class="digit-bars" id="digit-bars-v75"></div>
+            <div class="digit-labels">
+              <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span>
+              <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+            </div>
+          </div>
+          <div class="digit-stats" id="digit-stats-v75">
+            <span class="stat-item">Even: <strong id="even-pct-v75">—</strong></span>
+            <span class="stat-item">Odd: <strong id="odd-pct-v75">—</strong></span>
+            <span class="stat-item">Over5: <strong id="over-pct-v75">—</strong></span>
+            <span class="stat-item">Under5: <strong id="under-pct-v75">—</strong></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Streak Detector <span class="tag">Real-time</span></div>
+          <div class="streak-panel" id="streak-panel">
+            <div class="streak-row">
+              <span class="streak-label">V75 Even Streak:</span>
+              <div class="streak-dots" id="streak-v75-even"></div>
+              <span class="streak-count" id="streak-v75-even-count">0</span>
+            </div>
+            <div class="streak-row">
+              <span class="streak-label">V75 Odd Streak:</span>
+              <div class="streak-dots" id="streak-v75-odd"></div>
+              <span class="streak-count" id="streak-v75-odd-count">0</span>
+            </div>
+            <div class="streak-row">
+              <span class="streak-label">V10 Even Streak:</span>
+              <div class="streak-dots" id="streak-v10-even"></div>
+              <span class="streak-count" id="streak-v10-even-count">0</span>
+            </div>
+            <div class="streak-row">
+              <span class="streak-label">Rise Streak:</span>
+              <div class="streak-dots" id="streak-rise"></div>
+              <span class="streak-count" id="streak-rise-count">0</span>
+            </div>
+          </div>
+          <div class="streak-alert" id="streak-alert">Monitoring streaks...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== RISE / FALL ===== -->
+    <div class="page" id="page-rise-fall">
+      <div class="page-header">
+        <h1 class="page-title">Rise / Fall <span class="accent">Analysis</span></h1>
+        <p class="page-sub">EMA + RSI + MACD Greenlight System</p>
+      </div>
+
+      <div class="greenlight-panel">
+        <div class="gl-box" id="gl-trend">
+          <div class="gl-label">TREND</div>
+          <div class="gl-icon">↑↓</div>
+          <div class="gl-status" id="gl-trend-status">Checking EMA 20/50/200...</div>
+          <div class="gl-detail" id="gl-trend-detail">EMA 20 > 50 > 200 → Bullish</div>
+        </div>
+        <div class="gl-box" id="gl-momentum">
+          <div class="gl-label">MOMENTUM</div>
+          <div class="gl-icon">◈</div>
+          <div class="gl-status" id="gl-mom-status">Checking RSI...</div>
+          <div class="gl-detail" id="gl-mom-detail">RSI Period 14 | Range 30-70</div>
+        </div>
+        <div class="gl-box" id="gl-entry">
+          <div class="gl-label">ENTRY SIGNAL</div>
+          <div class="gl-icon">⚡</div>
+          <div class="gl-status" id="gl-entry-status">Scanning MACD...</div>
+          <div class="gl-detail" id="gl-entry-detail">MACD histogram + crossover</div>
+        </div>
+        <div class="gl-box gl-location" id="gl-location">
+          <div class="gl-label">LOCATION</div>
+          <div class="gl-icon">◎</div>
+          <div class="gl-status" id="gl-loc-status">Support/Resistance</div>
+          <div class="gl-detail" id="gl-loc-detail">Price near EMA 20 | S&R zones</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Market Selector</div>
+          <div class="market-btns">
+            <button class="mkt-btn active" data-mkt="R_10">V10</button>
+            <button class="mkt-btn" data-mkt="R_25">V25</button>
+            <button class="mkt-btn" data-mkt="R_50">V50</button>
+            <button class="mkt-btn" data-mkt="R_75">V75</button>
+            <button class="mkt-btn" data-mkt="R_100">V100</button>
+          </div>
+          <div class="card-title" style="margin-top:16px">Timeframe</div>
+          <div class="market-btns">
+            <button class="tf-btn active" data-tf="60">1m</button>
+            <button class="tf-btn" data-tf="300">5m</button>
+            <button class="tf-btn" data-tf="900">15m</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Signal Conditions</div>
+          <div class="condition-list" id="rf-conditions">
+            <div class="cond-item pending" id="cond-ema">⬤ EMA Alignment (20 > 50 > 200)</div>
+            <div class="cond-item pending" id="cond-rsi">⬤ RSI Above 50</div>
+            <div class="cond-item pending" id="cond-macd">⬤ MACD Green Histogram</div>
+            <div class="cond-item pending" id="cond-price">⬤ Price Above EMA 50</div>
+            <div class="cond-item pending" id="cond-support">⬤ Near Support/EMA 20</div>
+          </div>
+          <div class="final-signal" id="rf-final-signal">
+            <span class="signal-label">SIGNAL:</span>
+            <span class="signal-val" id="rf-signal-val">SCANNING</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Rise/Fall Performance Matrix</div>
+        <table class="perf-table">
+          <thead><tr><th>Market</th><th>Best Timeframe</th><th>RSI Zone</th><th>Condition</th><th>Signal</th></tr></thead>
+          <tbody id="rf-perf-tbody">
+            <tr><td>V10 (R_10)</td><td>1m - 5m</td><td>&gt;50 Rise / &lt;50 Fall</td><td>EMA Stack + MACD</td><td class="signal-cell" id="rf-r10">—</td></tr>
+            <tr><td>V25 (R_25)</td><td>5m</td><td>&gt;50 Rise / &lt;50 Fall</td><td>EMA Stack + MACD</td><td class="signal-cell" id="rf-r25">—</td></tr>
+            <tr><td>V50 (R_50)</td><td>5m</td><td>&gt;50 Rise / &lt;50 Fall</td><td>EMA Stack + MACD</td><td class="signal-cell" id="rf-r50">—</td></tr>
+            <tr><td>V75 (R_75)</td><td>5m - 15m</td><td>&gt;50 Rise / &lt;50 Fall</td><td>EMA Stack + MACD</td><td class="signal-cell" id="rf-r75">—</td></tr>
+            <tr><td>V100 (R_100)</td><td>5m - 15m</td><td>&gt;50 Rise / &lt;50 Fall</td><td>EMA Stack + MACD</td><td class="signal-cell" id="rf-r100">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== EVEN / ODD ===== -->
+    <div class="page" id="page-even-odd">
+      <div class="page-header">
+        <h1 class="page-title">Even / Odd <span class="accent">Strategy</span></h1>
+        <p class="page-sub">Statistical digit behavior analysis — NOT price behavior</p>
+      </div>
+
+      <div class="info-banner">⚠ Even/Odd is statistical behavior. Use pattern + volatility logic, NOT RSI alone.</div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">Digit Frequency (Last 20 ticks)</div>
+          <div class="digit-stream" id="eo-digit-stream"></div>
+          <div class="eo-stats">
+            <div class="eo-stat even-stat">
+              <div class="eo-stat-val" id="eo-even-count">—</div>
+              <div class="eo-stat-label">EVEN</div>
+            </div>
+            <div class="eo-stat odd-stat">
+              <div class="eo-stat-val" id="eo-odd-count">—</div>
+              <div class="eo-stat-label">ODD</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Green Light Conditions</div>
+          <div class="condition-list">
+            <div class="cond-item" id="eo-cond1">⬤ Last 10-20 ticks show dominance</div>
+            <div class="cond-item" id="eo-cond2">⬤ RSI between 40-55 (Even entry)</div>
+            <div class="cond-item" id="eo-cond3">⬤ Price touches lower Bollinger Band</div>
+            <div class="cond-item" id="eo-cond4">⬤ EMA 5 crosses above EMA 10</div>
+          </div>
+          <div class="final-signal">
+            <span class="signal-label">GREENLIGHT:</span>
+            <span class="signal-val" id="eo-signal">WAITING</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Method Detector</div>
+          <div class="method-cards">
+            <div class="method-card" id="method-streak">
+              <div class="method-name">Method 1: Streak Break</div>
+              <div class="method-desc">5-7 same parity in a row → bet opposite</div>
+              <div class="method-signal" id="m1-signal">Monitoring...</div>
+            </div>
+            <div class="method-card" id="method-dominance">
+              <div class="method-name">Method 2: Dominance</div>
+              <div class="method-desc">Last 20 ticks: Even=14+, Odd=6- → Even continuation</div>
+              <div class="method-signal" id="m2-signal">Monitoring...</div>
+            </div>
+            <div class="method-card" id="method-alternate">
+              <div class="method-name">Method 3: Alternation</div>
+              <div class="method-desc">Even→Odd→Even→Odd pattern detected</div>
+              <div class="method-signal" id="m3-signal">Monitoring...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">When NOT to Trade Even/Odd</div>
+          <div class="warning-list">
+            <div class="warn-item">⚠ RSI between 45-55 (flat zone)</div>
+            <div class="warn-item">⚠ EMAs tangled together</div>
+            <div class="warn-item">⚠ Flat MACD histogram</div>
+            <div class="warn-item">⚠ Sideways/choppy market detected</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Best Time Frames</div>
+          <table class="mini-table">
+            <thead><tr><th>Market</th><th>Timeframe</th></tr></thead>
+            <tbody>
+              <tr><td>R-100 / R-25</td><td>1m - 5m</td></tr>
+              <tr><td>R-50 / R-75</td><td>5m</td></tr>
+              <tr><td>R-100</td><td>5m - 15m</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== OVER / UNDER ===== -->
+    <div class="page" id="page-over-under">
+      <div class="page-header">
+        <h1 class="page-title">Over / Under <span class="accent">Strategy</span></h1>
+        <p class="page-sub">Last digit analysis — Under: 0-4 | Over: 5-9</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card card-over">
+          <div class="card-title">🔺 OVER Entry Conditions</div>
+          <div class="condition-list">
+            <div class="cond-item" id="over-c1">⬤ Last digits mostly 0-4 (cold for over)</div>
+            <div class="cond-item" id="over-c2">⬤ RSI > 55</div>
+            <div class="cond-item" id="over-c3">⬤ Price expanding above EMA 20</div>
+            <div class="cond-item" id="over-c4">⬤ Bollinger Band expanding upward</div>
+          </div>
+          <div class="final-signal">
+            <span class="signal-label">OVER SIGNAL:</span>
+            <span class="signal-val" id="over-signal">SCANNING</span>
+          </div>
+        </div>
+
+        <div class="card card-under">
+          <div class="card-title">🔻 UNDER Entry Conditions</div>
+          <div class="condition-list">
+            <div class="cond-item" id="under-c1">⬤ Last digits mostly 5-9 (hot → under)</div>
+            <div class="cond-item" id="under-c2">⬤ RSI < 45</div>
+            <div class="cond-item" id="under-c3">⬤ EMA 5 < EMA 20</div>
+            <div class="cond-item" id="under-c4">⬤ Lower band expanding</div>
+          </div>
+          <div class="final-signal">
+            <span class="signal-label">UNDER SIGNAL:</span>
+            <span class="signal-val" id="under-signal">SCANNING</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Live Digit Analysis — Last 20 Ticks</div>
+        <div class="ou-digit-display" id="ou-digits"></div>
+        <div class="ou-stats-row">
+          <div class="ou-stat">
+            <div class="ou-label">Low Digits (0-4)</div>
+            <div class="ou-val" id="ou-low">—</div>
+            <div class="ou-bar"><div class="ou-bar-fill low-fill" id="ou-low-bar"></div></div>
+          </div>
+          <div class="ou-stat">
+            <div class="ou-label">High Digits (5-9)</div>
+            <div class="ou-val" id="ou-high">—</div>
+            <div class="ou-bar"><div class="ou-bar-fill high-fill" id="ou-high-bar"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MATCHES / DIFFERS ===== -->
+    <div class="page" id="page-matches-differs">
+      <div class="page-header">
+        <h1 class="page-title">Matches / Differs <span class="accent">Analysis</span></h1>
+        <p class="page-sub">Digit repetition and divergence detection</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">MATCHES Entry</div>
+          <div class="condition-list">
+            <div class="cond-item">⬤ Same digit appears twice in last 10 ticks</div>
+            <div class="cond-item">⬤ Market is slow (low volume)</div>
+            <div class="cond-item">⬤ RSI flat near 50</div>
+            <div class="cond-item">⬤ Candle size small</div>
+          </div>
+          <div class="accuracy-rules">
+            <div class="acc-title">Accuracy Improvement Rules:</div>
+            <div class="acc-item">✓ Tick speed: normal</div>
+            <div class="acc-item">✓ Signals appear near Bollinger Band</div>
+            <div class="acc-item">✓ RSI not exactly at 50</div>
+            <div class="acc-item">✓ EMA ribbon slightly separated</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">DIFFERS Entry</div>
+          <div class="condition-list">
+            <div class="cond-item">⬤ High volatility detected</div>
+            <div class="cond-item">⬤ RSI > 60 or < 40</div>
+            <div class="cond-item">⬤ Bollinger Bands wide</div>
+            <div class="cond-item">⬤ Fast tick speed</div>
+          </div>
+          <div class="final-signal" style="margin-top:16px">
+            <span class="signal-label">TRADE TYPE:</span>
+            <span class="signal-val" id="md-signal">ANALYZING</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Digit Repeat Tracker — Last 20 ticks</div>
+        <div class="repeat-display" id="repeat-display"></div>
+        <div class="repeat-stats">
+          <div class="rep-stat" id="rep-counts"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DBOT STRATEGIES ===== -->
+    <div class="page" id="page-dbot">
+      <div class="page-header">
+        <h1 class="page-title">DBOT <span class="accent">Strategies 2026</span></h1>
+        <p class="page-sub">Automated bot configurations with greenlight conditions</p>
+      </div>
+
+      <div class="bot-grid">
+
+        <!-- Nuclear 9 -->
+        <div class="bot-card" data-bot="nuclear9">
+          <div class="bot-header">
+            <div class="bot-num">01</div>
+            <div class="bot-info">
+              <div class="bot-name">Nuclear 9</div>
+              <div class="bot-type">Matches/Differs 9 on V75</div>
+            </div>
+            <div class="bot-status" id="nuclear9-status">MONITORING</div>
+          </div>
+          <div class="bot-desc">Sniper for digit 9. Stocks with RSI + momentum filter.</div>
+          <div class="bot-conditions">
+            <div class="bc-title">Greenlight (3/5 to run):</div>
+            <div class="bc-item" id="n9-a">a. 9% in last 1000 ticks ≤ 9.0% (cold) for matches or ≥11.5% (hot) for differs</div>
+            <div class="bc-item" id="n9-b">b. RSI(14) ≤ 32 for matches or ≥64 for differs</div>
+            <div class="bc-item" id="n9-c">c. Price moving (last 10 ticks change ≥ 0.04)</div>
+            <div class="bc-item" id="n9-d">d. Time: 09:00–17:00 UTC</div>
+            <div class="bc-item" id="n9-e">e. No news spikes</div>
+          </div>
+          <div class="bot-exit">
+            <span class="exit-label">Exit:</span> Profit +$12 daily | Stop: Balance &lt;$7
+          </div>
+          <div class="bot-score">
+            Conditions Met: <strong id="n9-score">0</strong>/5
+            <div class="score-bar"><div class="score-fill" id="n9-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Zero Killer -->
+        <div class="bot-card" data-bot="zerokiller">
+          <div class="bot-header">
+            <div class="bot-num">02</div>
+            <div class="bot-info">
+              <div class="bot-name">Zero Killer</div>
+              <div class="bot-type">Matches/Differs 0 on V75</div>
+            </div>
+            <div class="bot-status" id="zerokiller-status">MONITORING</div>
+          </div>
+          <div class="bot-desc">Same as Nuclear 9 but for digit 0. Strongest cold/hot bias in 2026 meta.</div>
+          <div class="bot-conditions">
+            <div class="bc-title">Greenlight (3/5 to run):</div>
+            <div class="bc-item" id="zk-a">a. 0% in last 1000 ticks ≤8.9% (cold) or ≥11.5% (hot)</div>
+            <div class="bc-item" id="zk-b">b. RSI(14) &lt;30 for matches or >70 for differs</div>
+            <div class="bc-item" id="zk-c">c. Price moving (last 10 ticks change >0.04)</div>
+            <div class="bc-item" id="zk-d">d. Time: 09:00-12:00 UTC</div>
+            <div class="bc-item" id="zk-e">e. No news spikes</div>
+          </div>
+          <div class="bot-exit">
+            <span class="exit-label">Exit:</span> Profit +$12 daily | Stop: Balance &lt;$7
+          </div>
+          <div class="bot-score">
+            Conditions Met: <strong id="zk-score">0</strong>/5
+            <div class="score-bar"><div class="score-fill" id="zk-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Mirror 8 -->
+        <div class="bot-card" data-bot="mirror8">
+          <div class="bot-header">
+            <div class="bot-num">03</div>
+            <div class="bot-info">
+              <div class="bot-name">Mirror 8</div>
+              <div class="bot-type">Matches/Differs 8 on V75</div>
+            </div>
+            <div class="bot-status" id="mirror8-status">MONITORING</div>
+          </div>
+          <div class="bot-desc">Mirrors 9. 8 has similar streak power. Matches 8 when cold+up, Differs 8 when hot+down. 82% winrate.</div>
+          <div class="bot-conditions">
+            <div class="bc-title">Greenlight (3/5 to run):</div>
+            <div class="bc-item" id="m8-a">a. 8% in last 1000 ticks ≤9.0% (cold) or ≥11.5% (hot)</div>
+            <div class="bc-item" id="m8-b">b. RSI(14) &lt;32 for matches or >68 for differs</div>
+            <div class="bc-item" id="m8-c">c. Price moving (last 10 ticks change >0.04)</div>
+            <div class="bc-item" id="m8-d">d. Time: 08:00-17:00 UTC</div>
+            <div class="bc-item" id="m8-e">e. No news spikes</div>
+          </div>
+          <div class="bot-exit">
+            <span class="exit-label">Exit:</span> Profit +$12 daily | Stop: Balance &lt;$7
+          </div>
+          <div class="bot-score">
+            Conditions Met: <strong id="m8-score">0</strong>/5
+            <div class="score-bar"><div class="score-fill" id="m8-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- One Streak Beast -->
+        <div class="bot-card" data-bot="onestreak">
+          <div class="bot-header">
+            <div class="bot-num">04</div>
+            <div class="bot-info">
+              <div class="bot-name">One Streak Beast</div>
+              <div class="bot-type">Matches/Differs 1 on V75</div>
+            </div>
+            <div class="bot-status" id="onestreak-status">MONITORING</div>
+          </div>
+          <div class="bot-desc">For digit 1. Loves long streaks. Matches 1 when cold+up, Differs 1 when hot+down. 78% win rate for streaks.</div>
+          <div class="bot-conditions">
+            <div class="bc-title">Greenlight (3/5 to run):</div>
+            <div class="bc-item" id="os-a">a. 1% in last 1000 ticks ≤9.0% (cold) or ≥11.5% (hot)</div>
+            <div class="bc-item" id="os-b">b. RSI(14) &lt;32 for matches or >68 for differs</div>
+            <div class="bc-item" id="os-c">c. Price moving (last 10 ticks change >0.04)</div>
+            <div class="bc-item" id="os-d">d. Time: 09:00-17:00 UTC</div>
+            <div class="bc-item" id="os-e">e. No news spikes</div>
+          </div>
+          <div class="bot-exit">
+            <span class="exit-label">Exit:</span> Profit +$12 daily | Stop: Balance &lt;$7
+          </div>
+          <div class="bot-score">
+            Conditions Met: <strong id="os-score">0</strong>/5
+            <div class="score-bar"><div class="score-fill" id="os-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Fire Bias Monster -->
+        <div class="bot-card" data-bot="firebias">
+          <div class="bot-header">
+            <div class="bot-num">05</div>
+            <div class="bot-info">
+              <div class="bot-name">Fire Bias Monster</div>
+              <div class="bot-type">Over/Under 5 on V75</div>
+            </div>
+            <div class="bot-status" id="firebias-status">MONITORING</div>
+          </div>
+          <div class="bot-desc">Switches Over5/Under5 based on high/low digits in last 100 ticks. Adds RSI for edge. 75% win rate on 9-ticks.</div>
+          <div class="bot-conditions">
+            <div class="bc-title">Greenlight (3/5 to run):</div>
+            <div class="bc-item" id="fb-a">a. High digits (5-9) ≥50% in last 1000 ticks → Over5 or ≤50% for Under5</div>
+            <div class="bc-item" id="fb-b">b. RSI(14) >50 for Over5 or &lt;50 for Under5</div>
+            <div class="bc-item" id="fb-c">c. Price moving (last 10 ticks change >0.02)</div>
+            <div class="bc-item" id="fb-d">d. Time: 08:00-18:00 UTC</div>
+            <div class="bc-item" id="fb-e">e. No chop (chart not flat)</div>
+          </div>
+          <div class="bot-exit">
+            <span class="exit-label">Exit:</span> Profit +$12 daily | Stop: Balance &lt;$7
+          </div>
+          <div class="bot-score">
+            Conditions Met: <strong id="fb-score">0</strong>/5
+            <div class="score-bar"><div class="score-fill" id="fb-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Under Beast Scalper -->
+        <div class="bot-card" data-bot="underbeast">
+          <div class="bot-header">
+            <div class="bot-num">06</div>
+            <div class="bot-info">
+              <div class="bot-name">Under Beast Scalper</div>
+              <div class="bot-type">Over/Under</div>
+            </div>
+            <div class="bot-status" id="underbeast-status">MONITORING</div>
+          </div>
+          <div class="bot-desc">Scalps under 5 when low digit bias, over 5 when high. RSI filter for edge. 78% win rate on 3-ticks.</div>
+          <div class="bot-conditions">
+            <div class="bc-title">Greenlight (3/5 to run):</div>
+            <div class="bc-item" id="ub-a">a. Low digits (0-4) ≥50% in last 1000 ticks for Under5 or ≤50% for Over5</div>
+            <div class="bc-item" id="ub-b">b. RSI(14) &lt;45 for Under5 or >55 for Over5</div>
+            <div class="bc-item" id="ub-c">c. Price moving (last 5 ticks change >0.015)</div>
+            <div class="bc-item" id="ub-d">d. Time frame: 07:00-19:00 UTC</div>
+            <div class="bc-item" id="ub-e">e. Market not choppy</div>
+          </div>
+          <div class="bot-exit">
+            <span class="exit-label">Exit:</span> Profit +$15 daily | Stop: Balance &lt;$5.8
+          </div>
+          <div class="bot-score">
+            Conditions Met: <strong id="ub-score">0</strong>/5
+            <div class="score-bar"><div class="score-fill" id="ub-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Even Streak Sniper -->
+        <div class="bot-card" data-bot="evenstreak">
+          <div class="bot-header">
+            <div class="bot-num">07</div>
+            <div class="bot-info">
+              <div class="bot-name">Even Streak Sniper</div>
+              <div class="bot-type">Even/Odd on V10</div>
+            </div>
+            <div class="bot-status" id="evenstreak-status">MONITORING</div>
+          </div>
+          <div class="bot-desc">Snipes even after 2 even streak + bias. Odd after 2 odds. 76% win rate on 3-ticks.</div>
+          <div class="bot-conditions">
+            <div class="bc-title">Greenlight (3/5 to run):</div>
+            <div class="bc-item" id="es-a">a. Even ≥50% in last 1000 ticks (even bias) or &lt;50% for odd</div>
+            <div class="bc-item" id="es-b">b. Last 2 ticks even for even entry or odd for odd entry</div>
+            <div class="bc-item" id="es-c">c. RSI(14) &lt;48 for even or >52 for odd</div>
+            <div class="bc-item" id="es-d">d. Time frame: 07:00-19:00 UTC</div>
+            <div class="bc-item" id="es-e">e. No chop detected</div>
+          </div>
+          <div class="bot-exit">
+            <span class="exit-label">Exit:</span> Profit +$12 daily | Stop: Balance &lt;$7
+          </div>
+          <div class="bot-score">
+            Conditions Met: <strong id="es-score">0</strong>/5
+            <div class="score-bar"><div class="score-fill" id="es-bar" style="width:0%"></div></div>
+          </div>
+        </div>
+
+      </div><!-- /bot-grid -->
+    </div>
+
+    <!-- ===== BOT ANALYSIS ===== -->
+    <div class="page" id="page-bot-analysis">
+      <div class="page-header">
+        <h1 class="page-title">Bot <span class="accent">Analysis</span> Guide</div>
+        <p class="page-sub">bots.com strategy implementation reference</p>
+      </div>
+
+      <div class="volatility-matrix">
+        <div class="card">
+          <div class="card-title">Volatility Performance Matrix</div>
+          <table class="perf-table">
+            <thead><tr><th>Market</th><th>Win Rate</th><th>Best Time</th><th>Risk</th></tr></thead>
+            <tbody>
+              <tr><td>R-10</td><td class="good">68-70%</td><td>08:00-12:00</td><td class="risk-low">Low</td></tr>
+              <tr><td>R-25</td><td class="good">65-68%</td><td>09:00-15:00</td><td class="risk-low">Low</td></tr>
+              <tr><td>R-50</td><td class="mid">60-63%</td><td>10:00-14:00</td><td class="risk-mid">Medium</td></tr>
+              <tr><td>R-75</td><td class="mid">55-58%</td><td>Avoid</td><td class="risk-high">High</td></tr>
+              <tr><td>R-100</td><td class="bad">&lt;50%</td><td>Avoid</td><td class="risk-high">Extreme</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-title">Bot Specifications</div>
+      <div class="bot-spec-grid">
+
+        <div class="spec-card">
+          <div class="spec-header">
+            <span class="spec-num">Bot #1</span>
+            <span class="spec-name">Even/Odd Streak Reversal</span>
+          </div>
+          <div class="spec-row"><span>Market:</span><span>V10/V25/V50/V75/V100 (1s)</span></div>
+          <div class="spec-row"><span>Logic:</span><span>After 4-5 consecutive same parity → bet opposite</span></div>
+          <div class="spec-row"><span>Added Logic:</span><span>RSI filter + digit frequency analysis</span></div>
+          <div class="spec-row"><span>Duration:</span><span>3 ticks</span></div>
+          <div class="spec-row"><span>Stake:</span><span>1-2% of balance</span></div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-header">
+            <span class="spec-num">Bot #2</span>
+            <span class="spec-name">Over/Under Digit Hunter</span>
+          </div>
+          <div class="spec-row"><span>Market:</span><span>V75 (1s)</span></div>
+          <div class="spec-row"><span>Logic:</span><span>Bullish candles → Over 5, Bearish → Under 4</span></div>
+          <div class="spec-row"><span>Added Logic:</span><span>Candle body % filter + digit pattern recognition</span></div>
+          <div class="spec-row"><span>Duration:</span><span>2 ticks</span></div>
+          <div class="spec-row"><span>Stake:</span><span>1-5% of balance</span></div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-header">
+            <span class="spec-num">Bot #3</span>
+            <span class="spec-name">BerlinX9 RSI Momentum</span>
+          </div>
+          <div class="spec-row"><span>Market:</span><span>V75 (1s)</span></div>
+          <div class="spec-row"><span>Logic:</span><span>RSI &lt;33 → Rise | RSI >67 → Fall</span></div>
+          <div class="spec-row"><span>Added Logic:</span><span>EMA trend confirmation + volatility filter</span></div>
+          <div class="spec-row"><span>Duration:</span><span>5 ticks</span></div>
+          <div class="spec-row"><span>Stake:</span><span>2% of balance</span></div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-header">
+            <span class="spec-num">Bot #4</span>
+            <span class="spec-name">BFAST07 Multi-EMA</span>
+          </div>
+          <div class="spec-row"><span>Market:</span><span>V10 (1s)</span></div>
+          <div class="spec-row"><span>Logic:</span><span>RSI outside 40-60 + EMA separation</span></div>
+          <div class="spec-row"><span>Added Logic:</span><span>Min price movement, time filter 08:00-20:00 UTC</span></div>
+          <div class="spec-row"><span>Duration:</span><span>5 ticks</span></div>
+          <div class="spec-row"><span>Stake:</span><span>1% of balance</span></div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-header">
+            <span class="spec-num">Bot #5</span>
+            <span class="spec-name">Gas Hunter Digit Dominance</span>
+          </div>
+          <div class="spec-row"><span>Market:</span><span>V10 (1s)</span></div>
+          <div class="spec-row"><span>Logic:</span><span>Last 20 ticks digit count → trade dominant side</span></div>
+          <div class="spec-row"><span>Added Logic:</span><span>1-tick digit duration + momentum confirmation</span></div>
+          <div class="spec-row"><span>Duration:</span><span>1 tick</span></div>
+          <div class="spec-row"><span>Stake:</span><span>1% of balance</span></div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-header">
+            <span class="spec-num">Bot #6</span>
+            <span class="spec-name">Hawk Under 5 Sniper</span>
+          </div>
+          <div class="spec-row"><span>Market:</span><span>V10/V100</span></div>
+          <div class="spec-row"><span>Logic:</span><span>≥40% low digits + RSI &lt;42 → Under 5</span></div>
+          <div class="spec-row"><span>Added Logic:</span><span>Loss limits + minimum price change</span></div>
+          <div class="spec-row"><span>Duration:</span><span>3 ticks</span></div>
+          <div class="spec-row"><span>Stake:</span><span>1% of balance</span></div>
+        </div>
+
+        <div class="spec-card">
+          <div class="spec-header">
+            <span class="spec-num">Bot #7</span>
+            <span class="spec-name">Even Streak Sniper</span>
+          </div>
+          <div class="spec-row"><span>Market:</span><span>V10 (1s)</span></div>
+          <div class="spec-row"><span>Logic:</span><span>Last 20 ticks: all even + even >50% in last 100 ticks</span></div>
+          <div class="spec-row"><span>Added Logic:</span><span>3-tick duration, time filter 05:00-18:00 UTC</span></div>
+          <div class="spec-row"><span>Duration:</span><span>3 ticks</span></div>
+          <div class="spec-row"><span>Stake:</span><span>1.5% of balance</span></div>
+        </div>
+
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div class="card-title">Bot Combinations — Session Guide</div>
+        <div class="session-grid">
+          <div class="session-block morning">
+            <div class="session-name">☀ Morning Session (08:00-12:00)</div>
+            <div class="session-bots">
+              <div>Bot #1 (Even/Odd) — 30% allocation</div>
+              <div>Bot #3 (BerlinX9) — 40% allocation</div>
+              <div>Bot #7 (Even Streak) — 30% allocation</div>
+            </div>
+          </div>
+          <div class="session-block afternoon">
+            <div class="session-name">🌤 Afternoon Session (12:00-16:00)</div>
+            <div class="session-bots">
+              <div>Bot #2 (Over/Under) — 50% allocation</div>
+              <div>Bot #4 (BFAST07) — 50% allocation</div>
+            </div>
+          </div>
+          <div class="session-block evening">
+            <div class="session-name">🌙 Evening Session (16:00-18:00)</div>
+            <div class="session-bots">
+              <div>Bot #5 (Gas Hunter) — 60% allocation</div>
+              <div>Bot #6 (Hawk) — 40% allocation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DIGIT TRACKER ===== -->
+    <div class="page" id="page-digit-tracker">
+      <div class="page-header">
+        <h1 class="page-title">Live Digit <span class="accent">Tracker</span></h1>
+        <p class="page-sub">Real-time last digit frequency analysis</p>
+      </div>
+
+      <div class="tracker-controls">
+        <select class="ctrl-select" id="tracker-market">
+          <option value="R_10">Volatility 10 (1s)</option>
+          <option value="R_25">Volatility 25 (1s)</option>
+          <option value="R_50">Volatility 50 (1s)</option>
+          <option value="R_75" selected>Volatility 75 (1s)</option>
+          <option value="R_100">Volatility 100 (1s)</option>
+        </select>
+        <select class="ctrl-select" id="tracker-window">
+          <option value="20">Last 20 ticks</option>
+          <option value="50">Last 50 ticks</option>
+          <option value="100" selected>Last 100 ticks</option>
+          <option value="500">Last 500 ticks</option>
+          <option value="1000">Last 1000 ticks</option>
+        </select>
+        <button class="ctrl-btn" id="tracker-reset">Reset</button>
+      </div>
+
+      <div class="tracker-main">
+        <div class="card">
+          <div class="card-title">Digit Distribution</div>
+          <div class="big-digit-chart" id="big-digit-chart"></div>
+          <div class="big-digit-labels">
+            <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span>
+            <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Statistics</div>
+            <div class="tracker-stats" id="tracker-stats">
+              <div class="ts-row"><span>Total Ticks:</span><strong id="ts-total">0</strong></div>
+              <div class="ts-row"><span>Even Count:</span><strong id="ts-even">0</strong></div>
+              <div class="ts-row"><span>Odd Count:</span><strong id="ts-odd">0</strong></div>
+              <div class="ts-row"><span>Even %:</span><strong id="ts-even-pct">0%</strong></div>
+              <div class="ts-row"><span>Odd %:</span><strong id="ts-odd-pct">0%</strong></div>
+              <div class="ts-row"><span>Over5 %:</span><strong id="ts-over">0%</strong></div>
+              <div class="ts-row"><span>Under5 %:</span><strong id="ts-under">0%</strong></div>
+              <div class="ts-row"><span>Coldest Digit:</span><strong id="ts-cold">—</strong></div>
+              <div class="ts-row"><span>Hottest Digit:</span><strong id="ts-hot">—</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Live Tick Stream</div>
+            <div class="tick-stream" id="tick-stream"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GREEN LIGHT SYSTEM ===== -->
+    <div class="page" id="page-greenlight">
+      <div class="page-header">
+        <h1 class="page-title">Green Light <span class="accent">System</span></h1>
+        <p class="page-sub">Digit Green Light — Even/Odd entry logic</p>
+      </div>
+
+      <div class="gl-system">
+        <div class="card">
+          <div class="card-title">Even Digit Entry Conditions</div>
+          <div class="gl-conditions">
+            <div class="gl-cond" id="glc-dominance">
+              <div class="glc-label">Last 10-20 ticks show even dominance</div>
+              <div class="glc-example">(example: 13 odd, 7 even)</div>
+              <div class="glc-status" id="glcs-1">—</div>
+            </div>
+            <div class="gl-and">AND</div>
+            <div class="gl-cond" id="glc-rsi">
+              <div class="glc-label">RSI between 40-55</div>
+              <div class="glc-status" id="glcs-2">—</div>
+            </div>
+            <div class="gl-and">AND</div>
+            <div class="gl-cond" id="glc-bollinger">
+              <div class="glc-label">Price touches/pierces lower Bollinger Band</div>
+              <div class="glc-status" id="glcs-3">—</div>
+            </div>
+            <div class="gl-and">AND</div>
+            <div class="gl-cond" id="glc-ema-cross">
+              <div class="glc-label">EMA 5 crosses above EMA 10</div>
+              <div class="glc-status" id="glcs-4">—</div>
+            </div>
+          </div>
+          <div class="gl-result" id="gl-even-result">GREEN LIGHT = <span id="gl-even-val">CHECKING</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Odd Digit Entry Conditions</div>
+          <div class="gl-conditions">
+            <div class="gl-cond" id="glc-odd-dom">
+              <div class="glc-label">Last 10-20 ticks show even dominance (reverse signal)</div>
+              <div class="glc-status" id="glcs-5">—</div>
+            </div>
+            <div class="gl-and">AND</div>
+            <div class="gl-cond" id="glc-odd-rsi">
+              <div class="glc-label">RSI between 45-65</div>
+              <div class="glc-status" id="glcs-6">—</div>
+            </div>
+            <div class="gl-and">AND</div>
+            <div class="gl-cond" id="glc-upper-bb">
+              <div class="glc-label">Price touches upper Bollinger Band</div>
+              <div class="glc-status" id="glcs-7">—</div>
+            </div>
+            <div class="gl-and">AND</div>
+            <div class="gl-cond" id="glc-ema-down">
+              <div class="glc-label">EMA 5 crosses below EMA 10</div>
+              <div class="glc-status" id="glcs-8">—</div>
+            </div>
+          </div>
+          <div class="gl-result" id="gl-odd-result">GREEN LIGHT = <span id="gl-odd-val">CHECKING</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">RSI Flat → No Trade</div>
+        <div class="info-banner">When RSI is flat around 50 → random zone → DO NOT TRADE</div>
+        <div class="no-trade-conditions">
+          <div class="ntc-item">⛔ RSI between 45-55 (dead zone)</div>
+          <div class="ntc-item">⛔ EMAs tangled together</div>
+          <div class="ntc-item">⛔ Flat MACD histogram</div>
+          <div class="ntc-item">⛔ Sideways/consolidating market</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== JOURNAL ===== -->
+    <div class="page" id="page-journal">
+      <div class="page-header">
+        <h1 class="page-title">Trade <span class="accent">Journal</span></h1>
+        <p class="page-sub">Log, analyze and improve your trading performance</p>
+      </div>
+
+      <div class="journal-form card">
+        <div class="card-title">Log New Trade</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Market</label>
+            <select class="form-ctrl" id="j-market">
+              <option>V10 (R_10)</option><option>V25 (R_25)</option>
+              <option>V50 (R_50)</option><option>V75 (R_75)</option><option>V100 (R_100)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Strategy</label>
+            <select class="form-ctrl" id="j-strategy">
+              <option>Rise/Fall</option><option>Even/Odd</option><option>Over/Under</option>
+              <option>Matches/Differs</option><option>DBOT Nuclear9</option><option>DBOT Zero Killer</option>
+              <option>DBOT Mirror8</option><option>DBOT One Streak Beast</option>
+              <option>DBOT Fire Bias Monster</option><option>DBOT Under Beast Scalper</option>
+              <option>DBOT Even Streak Sniper</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Result</label>
+            <select class="form-ctrl" id="j-result">
+              <option value="win">WIN ✓</option>
+              <option value="loss">LOSS ✗</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stake ($)</label>
+            <input type="number" class="form-ctrl" id="j-stake" placeholder="1.00" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>P&L ($)</label>
+            <input type="number" class="form-ctrl" id="j-pnl" placeholder="0.85">
+          </div>
+          <div class="form-group">
+            <label>Greenlight Met?</label>
+            <select class="form-ctrl" id="j-greenlight">
+              <option value="yes">Yes (3/5+)</option>
+              <option value="partial">Partial (2/5)</option>
+              <option value="no">No (forced)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>Notes</label>
+          <textarea class="form-ctrl" id="j-notes" rows="2" placeholder="What did you observe? What worked?"></textarea>
+        </div>
+        <button class="submit-btn" id="j-submit">Log Trade</button>
+      </div>
+
+      <div class="journal-stats card">
+        <div class="card-title">Performance Summary</div>
+        <div class="stat-row-big">
+          <div class="stat-big"><div class="stat-big-val" id="j-total-trades">0</div><div class="stat-big-label">Total Trades</div></div>
+          <div class="stat-big"><div class="stat-big-val green" id="j-winrate">0%</div><div class="stat-big-label">Win Rate</div></div>
+          <div class="stat-big"><div class="stat-big-val" id="j-total-pnl">$0.00</div><div class="stat-big-label">Total P&L</div></div>
+          <div class="stat-big"><div class="stat-big-val" id="j-best-strat">—</div><div class="stat-big-label">Best Strategy</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Trade History</div>
+        <table class="signal-table" id="journal-table">
+          <thead><tr><th>Time</th><th>Market</th><th>Strategy</th><th>Result</th><th>P&L</th><th>GL</th><th>Notes</th></tr></thead>
+          <tbody id="journal-tbody"><tr><td colspan="7" class="loading-row">No trades logged yet</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /page-container -->
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
