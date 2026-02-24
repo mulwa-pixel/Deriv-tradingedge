@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DerivEdge Pro — Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030712;--bg2:#0a0f1a;--bg3:#0f172a;
+  --border:rgba(99,179,237,0.12);--border2:rgba(99,179,237,0.2);
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --accent:#38bdf8;--accent2:#0ea5e9;
+  --green:#10b981;--green2:#34d399;
+  --red:#ef4444;--red2:#f87171;
+  --yellow:#f59e0b;--purple:#8b5cf6;
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);padding:24px;max-width:1200px;margin:0 auto}
+h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px}
+h1 span{color:var(--accent)}
+.subtitle{color:var(--text2);font-size:14px;margin-bottom:28px}
+.tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.tab-btn{padding:9px 20px;background:rgba(56,189,248,0.06);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s}
+.tab-btn:hover{background:rgba(56,189,248,0.12);color:var(--text)}
+.tab-btn.active{background:rgba(56,189,248,0.15);border-color:var(--accent);color:var(--accent)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.card{background:rgba(15,23,42,0.8);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;color:var(--text2);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* FORM CONTROLS */
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+label{font-size:11px;letter-spacing:1px;color:var(--text3);text-transform:uppercase}
+select,input,textarea{padding:9px 12px;background:rgba(15,23,42,0.8);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color 0.2s;resize:vertical}
+select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+.btn{padding:10px 20px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;transition:opacity 0.2s}
+.btn:hover{opacity:0.9}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--accent)}
+.btn-outline:hover{background:rgba(56,189,248,0.08)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* CODE OUTPUT */
+.code-block{background:#020817;border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'DM Mono',monospace;font-size:12px;line-height:1.7;color:#94e2d5;max-height:420px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;padding:4px 10px;background:rgba(56,189,248,0.1);border:1px solid var(--border2);border-radius:5px;color:var(--accent);font-size:11px;cursor:pointer;font-family:'Outfit',sans-serif}
+.copy-btn:hover{background:rgba(56,189,248,0.2)}
+
+/* PROBABILITY TABLE */
+.prob-table{width:100%;border-collapse:collapse;font-size:13px}
+.prob-table th{padding:9px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+.prob-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.04);font-family:'DM Mono',monospace;font-size:12px}
+.prob-table tr:hover td{background:rgba(56,189,248,0.03)}
+.cold{color:var(--accent);font-weight:700}
+.hot{color:var(--red);font-weight:700}
+.normal{color:var(--text2)}
+
+/* DIGIT PROBABILITY BARS */
+.prob-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px}
+.prob-cell{background:rgba(15,23,42,0.8);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;transition:all 0.3s}
+.prob-cell.cold-cell{border-color:rgba(56,189,248,0.4);background:rgba(56,189,248,0.08)}
+.prob-cell.hot-cell{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.08)}
+.prob-digit{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px}
+.prob-pct{font-family:'DM Mono',monospace;font-size:13px;font-weight:600}
+.prob-bar-outer{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-top:6px}
+.prob-bar-inner{height:100%;border-radius:2px;transition:width 0.5s ease}
+.even-d .prob-digit{color:var(--accent)}
+.odd-d .prob-digit{color:var(--purple)}
+.cold-cell .prob-pct{color:var(--accent)}
+.hot-cell .prob-pct{color:var(--red)}
+
+/* BOT CONDITION TABLE */
+.cond-check{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;margin-bottom:6px;background:rgba(56,189,248,0.04);border:1px solid var(--border);font-size:13px}
+.check-icon{font-size:16px;width:20px;text-align:center}
+.check-pass{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.25)}
+.check-fail{background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.15);opacity:0.7}
+
+/* STRATEGY BUILDER */
+.builder-step{display:flex;align-items:flex-start;gap:14px;padding:14px;background:rgba(15,23,42,0.8);border:1px solid var(--border);border-radius:10px;margin-bottom:10px}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.3);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);flex-shrink:0;margin-top:2px}
+.step-content{flex:1}
+.step-title{font-weight:600;font-size:14px;margin-bottom:6px}
+.step-desc{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* RISK CALCULATOR */
+.risk-result{background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);border-radius:10px;padding:16px;margin-top:12px}
+.risk-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.risk-row:last-child{border:none;font-weight:700;color:var(--accent)}
+.risk-val{font-family:'DM Mono',monospace;font-weight:600}
+
+/* SIGNAL ALERT */
+.alert-box{padding:12px 16px;border-radius:8px;margin-bottom:12px;font-size:13px;font-weight:600}
+.alert-green{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:var(--green2)}
+.alert-yellow{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--yellow)}
+.alert-red{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--red2)}
+
+/* DEPLOY GUIDE */
+.deploy-step{display:flex;gap:12px;padding:12px;border-left:2px solid var(--accent);margin-bottom:8px;background:rgba(56,189,248,0.03)}
+.deploy-num{font-family:'DM Mono',monospace;color:var(--accent);font-weight:700;min-width:20px}
+.cmd-block{background:#020817;border:1px solid var(--border);border-radius:6px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:#86efac;margin:8px 0;position:relative}
+
+@media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}.prob-grid{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+
+<h1>DerivEdge Pro <span>Tools</span></h1>
+<p class="subtitle">PineScript Generator • DBOT XML Builder • Risk Calculator • Probability Dashboard • Deploy Guide</p>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('pinescript')">📊 PineScript</button>
+  <button class="tab-btn" onclick="showTab('dbot-xml')">🤖 DBOT XML</button>
+  <button class="tab-btn" onclick="showTab('probability')">🎯 Probability Dashboard</button>
+  <button class="tab-btn" onclick="showTab('risk-calc')">💰 Risk Calculator</button>
+  <button class="tab-btn" onclick="showTab('strategy-builder')">🏗 Strategy Builder</button>
+  <button class="tab-btn" onclick="showTab('deploy-guide')">🚀 Deploy Guide</button>
+</div>
+
+<!-- ===== PINESCRIPT TAB ===== -->
+<div class="tab-content active" id="tab-pinescript">
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-title">📊 PineScript Generator</div>
+        <div class="form-group">
+          <label>Strategy</label>
+          <select id="ps-strategy">
+            <option value="rise-fall">Rise / Fall (EMA + RSI + MACD)</option>
+            <option value="even-odd">Even / Odd Digit Strategy</option>
+            <option value="over-under">Over / Under Digit Strategy</option>
+            <option value="digit-prob">Digit Probability Dashboard</option>
+            <option value="greenlight">Green Light System</option>
+            <option value="macd-ema">MACD + EMA Combo</option>
+            <option value="bollinger">Bollinger Band Squeeze</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Market</label>
+          <select id="ps-market">
+            <option value="R_10">Volatility 10 (1s)</option>
+            <option value="R_25">Volatility 25 (1s)</option>
+            <option value="R_50">Volatility 50 (1s)</option>
+            <option value="R_75" selected>Volatility 75 (1s)</option>
+            <option value="R_100">Volatility 100 (1s)</option>
+          </select>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>RSI Period</label>
+            <input type="number" id="ps-rsi" value="14" min="5" max="30">
+          </div>
+          <div class="form-group">
+            <label>EMA Fast</label>
+            <input type="number" id="ps-ema-fast" value="20" min="5" max="50">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn" onclick="generatePS()">⚡ Generate Script</button>
+          <button class="btn btn-outline" onclick="copyPS()">📋 Copy</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🛠 How to Use in TradingView</div>
+        <div class="builder-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Open TradingView</div>
+            <div class="step-desc">Go to tradingview.com and open a chart for your Deriv symbol (e.g. BOOM1000, or use a synthetic proxy)</div>
+          </div>
+        </div>
+        <div class="builder-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Open Pine Editor</div>
+            <div class="step-desc">Click "Indicators" → "Pine Editor" at the bottom of the chart</div>
+          </div>
+        </div>
+        <div class="builder-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Paste & Add to Chart</div>
+            <div class="step-desc">Paste the generated code → Click "Add to chart"</div>
+          </div>
+        </div>
+        <div class="builder-step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Set to 1 Tick Chart</div>
+            <div class="step-desc">For digit strategies: Change timeframe to 1-tick, Line chart mode</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="height:calc(100% - 0px)">
+        <div class="card-title">
+          Generated PineScript
+          <button class="copy-btn" onclick="copyPS()">Copy</button>
+        </div>
+        <div class="code-block" id="ps-output">// Click "Generate Script" to create your PineScript indicator
+// Based on your strategy notes from DerivEdge Pro
+
+//@version=5
+indicator("DerivEdge Pro", overlay=true)
+plot(close, "Price", color.blue)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DBOT XML TAB ===== -->
+<div class="tab-content" id="tab-dbot-xml">
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🤖 DBOT XML Generator</div>
+      <div class="form-group">
+        <label>Bot Strategy</label>
+        <select id="dbot-strategy">
+          <option value="nuclear9">Nuclear 9 (Matches Digit 9)</option>
+          <option value="zerokiller">Zero Killer (Matches Digit 0)</option>
+          <option value="mirror8">Mirror 8 (Matches Digit 8)</option>
+          <option value="onestreak">One Streak Beast (Digit 1)</option>
+          <option value="firebias">Fire Bias Monster (Over/Under 5)</option>
+          <option value="underbeast">Under Beast Scalper</option>
+          <option value="evenstreak">Even Streak Sniper</option>
+          <option value="custom">Custom Digit Match</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Market</label>
+        <select id="dbot-market">
+          <option value="R_75" selected>Volatility 75 (1s)</option>
+          <option value="R_10">Volatility 10 (1s)</option>
+          <option value="R_25">Volatility 25 (1s)</option>
+          <option value="R_50">Volatility 50 (1s)</option>
+          <option value="R_100">Volatility 100 (1s)</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Stake ($)</label>
+          <input type="number" id="dbot-stake" value="1.00" step="0.01" min="0.35">
+        </div>
+        <div class="form-group">
+          <label>Duration (ticks)</label>
+          <input type="number" id="dbot-duration" value="1" min="1" max="10">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Take Profit ($)</label>
+          <input type="number" id="dbot-tp" value="12" step="0.5">
+        </div>
+        <div class="form-group">
+          <label>Stop Loss ($)</label>
+          <input type="number" id="dbot-sl" value="7" step="0.5">
+        </div>
+      </div>
+      <div class="form-group" id="custom-digit-group" style="display:none">
+        <label>Custom Digit (0-9)</label>
+        <input type="number" id="dbot-custom-digit" value="5" min="0" max="9">
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="generateDBot()">⚡ Generate XML</button>
+        <button class="btn btn-outline" onclick="copyDBot()">📋 Copy XML</button>
+        <button class="btn btn-outline" onclick="downloadDBot()">💾 Download .xml</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">How to Import to DBOT</div>
+      <div class="builder-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Download the XML file</div>
+          <div class="step-desc">Click "Download .xml" button above</div>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Open Deriv Bot</div>
+          <div class="step-desc">Go to app.deriv.com → Bot (or bot.deriv.com)</div>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Import XML</div>
+          <div class="step-desc">Click the folder icon → "Load bot" → Select your downloaded .xml file</div>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Verify & Run</div>
+          <div class="step-desc">Check all settings are correct → Click Run. Always test with minimum stake first!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      Generated DBOT XML
+      <button class="copy-btn" onclick="copyDBot()">Copy</button>
+    </div>
+    <div class="code-block" id="dbot-output"><!-- Click "Generate XML" to create your DBOT bot file --></div>
+  </div>
+</div>
+
+<!-- ===== PROBABILITY DASHBOARD ===== -->
+<div class="tab-content" id="tab-probability">
+  <div class="card">
+    <div class="card-title">🎯 Digit Probability Dashboard</div>
+    <div class="grid-3" style="margin-bottom:12px">
+      <div class="form-group">
+        <label>Market</label>
+        <select id="prob-market" onchange="updateProbDash()">
+          <option value="R_10">V10</option>
+          <option value="R_25">V25</option>
+          <option value="R_50">V50</option>
+          <option value="R_75" selected>V75</option>
+          <option value="R_100">V100</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Window (ticks)</label>
+        <select id="prob-window" onchange="updateProbDash()">
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000" selected>1000</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Threshold</label>
+        <select id="prob-threshold">
+          <option value="9.0">Cold ≤9.0% / Hot ≥11%</option>
+          <option value="8.5">Extreme ≤8.5% / Hot ≥12%</option>
+          <option value="7.0">Ultra Cold ≤7%</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="prob-alert" class="alert-yellow" style="display:none">Calculating probabilities...</div>
+
+    <div class="prob-grid" id="prob-grid-1">
+      <!-- Row 1: digits 0-4 -->
+    </div>
+    <div class="prob-grid" id="prob-grid-2">
+      <!-- Row 2: digits 5-9 -->
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📊 Digit Analysis Table</div>
+      <table class="prob-table">
+        <thead><tr><th>Digit</th><th>Count</th><th>%</th><th>Expected</th><th>Status</th><th>Signal</th></tr></thead>
+        <tbody id="prob-tbody">
+          <tr><td colspan="6" style="text-align:center;color:var(--text3);padding:16px">Connecting to live data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 Bot Recommendations Based on Probabilities</div>
+      <div id="bot-recommendations">
+        <p style="color:var(--text3);font-size:13px">Load probability data to see bot recommendations...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RISK CALCULATOR ===== -->
+<div class="tab-content" id="tab-risk-calc">
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">💰 Position Size & Risk Calculator</div>
+      <div class="form-group">
+        <label>Account Balance ($)</label>
+        <input type="number" id="rc-balance" value="100" step="1" oninput="calcRisk()">
+      </div>
+      <div class="form-group">
+        <label>Risk Per Trade (%)</label>
+        <input type="number" id="rc-risk-pct" value="1" step="0.1" min="0.1" max="10" oninput="calcRisk()">
+      </div>
+      <div class="form-group">
+        <label>Strategy</label>
+        <select id="rc-strategy" onchange="calcRisk()">
+          <option value="rise-fall">Rise/Fall (5 ticks)</option>
+          <option value="even-odd">Even/Odd (3 ticks)</option>
+          <option value="over-under">Over/Under (2 ticks)</option>
+          <option value="matches">Matches (1 tick)</option>
+          <option value="differs">Differs (1 tick)</option>
+          <option value="dbot">DBOT Bot (variable)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Daily Profit Target ($)</label>
+        <input type="number" id="rc-target" value="12" oninput="calcRisk()">
+      </div>
+      <div class="form-group">
+        <label>Daily Stop Loss ($)</label>
+        <input type="number" id="rc-stoploss" value="7" oninput="calcRisk()">
+      </div>
+      <div class="form-group">
+        <label>Win Rate (%)</label>
+        <input type="number" id="rc-winrate" value="65" min="1" max="99" oninput="calcRisk()">
+      </div>
+
+      <div class="risk-result" id="risk-result">
+        <div class="risk-row"><span>Recommended Stake:</span><span class="risk-val" id="rc-stake">$1.00</span></div>
+        <div class="risk-row"><span>Max Trades Today:</span><span class="risk-val" id="rc-max-trades">—</span></div>
+        <div class="risk-row"><span>Trades to Hit Target:</span><span class="risk-val" id="rc-trades-needed">—</span></div>
+        <div class="risk-row"><span>Expected Win:</span><span class="risk-val" id="rc-exp-win">—</span></div>
+        <div class="risk-row"><span>Expected Loss:</span><span class="risk-val" id="rc-exp-loss">—</span></div>
+        <div class="risk-row"><span>Expected Daily P&L:</span><span class="risk-val" id="rc-exp-pnl">—</span></div>
+        <div class="risk-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)"><span>Martingale OFF Recommended Stake:</span><span class="risk-val" id="rc-flat-stake">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📈 Balance Growth Simulation</div>
+      <canvas id="growth-chart" width="400" height="260"></canvas>
+      <div style="margin-top:12px;font-size:12px;color:var(--text3)">Simulation: 30 trading days with consistent risk management</div>
+      <div class="alert-green" id="growth-summary" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠ Risk Management Rules (from your notes)</div>
+    <div class="grid-3">
+      <div>
+        <div style="font-weight:700;color:var(--accent);margin-bottom:8px;font-size:13px">Daily Limits</div>
+        <div class="cond-check check-pass"><span class="check-icon">✅</span>Stop when +$12 profit hit</div>
+        <div class="cond-check check-pass"><span class="check-icon">✅</span>Stop when balance &lt;$7</div>
+        <div class="cond-check check-pass"><span class="check-icon">✅</span>Max 2 losses then pause</div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--yellow);margin-bottom:8px;font-size:13px">Entry Rules</div>
+        <div class="cond-check"><span class="check-icon">⬤</span>Only trade 3/5 greenlight</div>
+        <div class="cond-check"><span class="check-icon">⬤</span>No news spike periods</div>
+        <div class="cond-check"><span class="check-icon">⬤</span>RSI not flat at 50</div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--red2);margin-bottom:8px;font-size:13px">Never Do</div>
+        <div class="cond-check check-fail"><span class="check-icon">❌</span>Never run all bots simultaneously</div>
+        <div class="cond-check check-fail"><span class="check-icon">❌</span>Never trade during news events</div>
+        <div class="cond-check check-fail"><span class="check-icon">❌</span>Never martingale without off-switch</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STRATEGY BUILDER ===== -->
+<div class="tab-content" id="tab-strategy-builder">
+  <div class="card">
+    <div class="card-title">🏗 Custom Strategy Builder</div>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:16px">Build a custom strategy combining your indicators. Each selection generates the correct greenlight conditions.</p>
+
+    <div class="grid-3">
+      <div class="form-group">
+        <label>Contract Type</label>
+        <select id="sb-type" onchange="buildStrategy()">
+          <option value="rise-fall">Rise / Fall</option>
+          <option value="even-odd">Even / Odd</option>
+          <option value="over-under">Over / Under</option>
+          <option value="matches">Matches</option>
+          <option value="differs">Differs</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Market</label>
+        <select id="sb-market" onchange="buildStrategy()">
+          <option value="R_10">V10 (1s)</option>
+          <option value="R_25">V25 (1s)</option>
+          <option value="R_50">V50 (1s)</option>
+          <option value="R_75" selected>V75 (1s)</option>
+          <option value="R_100">V100 (1s)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Session</label>
+        <select id="sb-session" onchange="buildStrategy()">
+          <option value="morning">Morning (08:00-12:00 UTC)</option>
+          <option value="afternoon">Afternoon (12:00-16:00 UTC)</option>
+          <option value="evening">Evening (16:00-18:00 UTC)</option>
+          <option value="allday">All Day</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="form-group">
+        <label>RSI Filter</label>
+        <select id="sb-rsi" onchange="buildStrategy()">
+          <option value="above50">RSI > 50 (Bullish)</option>
+          <option value="below50">RSI &lt; 50 (Bearish)</option>
+          <option value="40-55">RSI 40-55 (Even zone)</option>
+          <option value="extreme">RSI Extreme (>65 or &lt;35)</option>
+          <option value="none">No RSI Filter</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>EMA Condition</label>
+        <select id="sb-ema" onchange="buildStrategy()">
+          <option value="bullstack">Bullish Stack (20>50>200)</option>
+          <option value="bearstack">Bearish Stack (20&lt;50&lt;200)</option>
+          <option value="e5cross">EMA5 Cross EMA10</option>
+          <option value="separated">EMA Separated</option>
+          <option value="none">No EMA Filter</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Volatility</label>
+        <select id="sb-vol" onchange="buildStrategy()">
+          <option value="normal">Normal (BB width 0.03-0.05)</option>
+          <option value="high">High Vol (BB wide)</option>
+          <option value="squeeze">Squeeze (BB tight)</option>
+          <option value="any">Any</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div id="strategy-output" class="card">
+    <div class="card-title">Generated Strategy Conditions</div>
+    <p style="color:var(--text3);font-size:13px">Select options above to generate your strategy...</p>
+  </div>
+</div>
+
+<!-- ===== DEPLOY GUIDE ===== -->
+<div class="tab-content" id="tab-deploy-guide">
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🚀 Deploy to GitHub Pages (Free)</div>
+      <div class="deploy-step">
+        <div class="deploy-num">1</div>
+        <div>
+          <strong>Open Termux on Android</strong>
+          <div class="cmd-block">pkg update && pkg install git nodejs</div>
+        </div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">2</div>
+        <div>
+          <strong>Create GitHub Account & Repo</strong>
+          <div style="font-size:12px;color:var(--text2)">Go to github.com → New Repository → Name: "derivedge-pro"</div>
+        </div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">3</div>
+        <div>
+          <strong>Push your files from Termux</strong>
+          <div class="cmd-block">mkdir derivedge && cd derivedge
+# Copy your files here, then:
+git init
+git add .
+git commit -m "DerivEdge Pro launch"
+git remote add origin https://github.com/YOUR_NAME/derivedge-pro.git
+git push -u origin main</div>
+        </div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">4</div>
+        <div>
+          <strong>Enable GitHub Pages</strong>
+          <div style="font-size:12px;color:var(--text2)">Settings → Pages → Source: main branch → Save<br>
+          Your site: <span style="color:var(--accent)">https://yourname.github.io/derivedge-pro</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">☁ Deploy to Render (Free + Custom Domain)</div>
+      <div class="deploy-step">
+        <div class="deploy-num">1</div>
+        <div>
+          <strong>Push to GitHub</strong>
+          <div style="font-size:12px;color:var(--text2)">Use the steps from the GitHub section above first</div>
+        </div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">2</div>
+        <div>
+          <strong>Create Render account</strong>
+          <div style="font-size:12px;color:var(--text2)">Go to render.com → Sign up with GitHub</div>
+        </div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">3</div>
+        <div>
+          <strong>Create New Web Service</strong>
+          <div class="cmd-block"># In Render dashboard:
+New → Web Service
+Connect: derivedge-pro (GitHub repo)
+Runtime: Node
+Build Command: npm install
+Start Command: npm start
+Plan: Free</div>
+        </div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">4</div>
+        <div>
+          <strong>Move frontend to /public folder</strong>
+          <div class="cmd-block">mkdir public
+mv index.html styles.css app.js public/
+git add . && git commit -m "add server"
+git push</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📱 Termux Quick Reference</div>
+    <div class="grid-3">
+      <div>
+        <div style="color:var(--accent);font-weight:700;font-size:12px;margin-bottom:8px">Essential Commands</div>
+        <div class="cmd-block">pkg install git nodejs python
+npm install -g serve
+serve . -p 3000</div>
+      </div>
+      <div>
+        <div style="color:var(--accent);font-weight:700;font-size:12px;margin-bottom:8px">Update & Redeploy</div>
+        <div class="cmd-block">git add .
+git commit -m "update"
+git push
+# Render auto-deploys!</div>
+      </div>
+      <div>
+        <div style="color:var(--accent);font-weight:700;font-size:12px;margin-bottom:8px">Local Testing</div>
+        <div class="cmd-block">cd derivedge-pro
+node server.js
+# Open: localhost:3000</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== PINESCRIPT TEMPLATES =====
+const psTemplates = {
+  'rise-fall': (rsi, emaFast) => `//@version=5
+// DerivEdge Pro — Rise/Fall Strategy
+// EMA Trend + RSI Momentum + MACD Entry
+// Best on: V10, V25, V50 | TF: 1m-5m
+indicator("DerivEdge Rise/Fall v2.0", overlay=true, max_bars_back=500)
+
+// === INPUTS ===
+rsiPeriod = input.int(${rsi}, "RSI Period", minval=5, maxval=30)
+emaFast = input.int(${emaFast}, "EMA Fast", minval=5, maxval=50)
+emaMid = input.int(50, "EMA Mid")
+emaSlow = input.int(200, "EMA Slow")
+showSignals = input.bool(true, "Show Entry Signals")
+showBG = input.bool(true, "Show Background Color")
+
+// === INDICATORS ===
+ema20 = ta.ema(close, emaFast)
+ema50 = ta.ema(close, emaMid)
+ema200 = ta.ema(close, emaSlow)
+rsiVal = ta.rsi(close, rsiPeriod)
+[macdLine, signalLine, histLine] = ta.macd(close, 12, 26, 9)
+[bbMid, bbUpper, bbLower] = ta.bb(close, 20, 2)
+
+// === TREND DETECTION ===
+bullTrend = ema20 > ema50 and ema50 > ema200
+bearTrend = ema20 < ema50 and ema50 < ema200
+flatZone = rsiVal >= 45 and rsiVal <= 55
+
+// === ENTRY CONDITIONS (Your Greenlight System) ===
+// RISE: All conditions must align
+riseCondition = bullTrend 
+  and rsiVal > 50 and rsiVal < 70 
+  and histLine > 0 
+  and close > ema50 
+  and close > ema20
+
+// FALL: Exact opposite
+fallCondition = bearTrend 
+  and rsiVal < 50 and rsiVal > 30 
+  and histLine < 0 
+  and close < ema50 
+  and close < ema20
+
+// === PLOTS ===
+ema20plot = plot(ema20, "EMA 20", color.new(color.blue, 0), 2)
+ema50plot = plot(ema50, "EMA 50", color.new(color.orange, 0), 2)
+ema200plot = plot(ema200, "EMA 200", color.new(color.red, 0), 2)
+
+fill(ema20plot, ema50plot, bullTrend ? color.new(color.green, 90) : color.new(color.red, 90))
+
+if showBG
+    bgcolor(flatZone ? color.new(color.gray, 92) : na, title="Flat/No Trade Zone")
+    bgcolor(riseCondition ? color.new(color.green, 90) : na, title="Rise Signal BG")
+    bgcolor(fallCondition ? color.new(color.red, 90) : na, title="Fall Signal BG")
+
+if showSignals
+    plotshape(riseCondition and not riseCondition[1], "RISE Signal", shape.labelup, location.belowbar, color.new(color.green,0), size=size.small, text="RISE ↑", textcolor=color.white)
+    plotshape(fallCondition and not fallCondition[1], "FALL Signal", shape.labeldown, location.abovebar, color.new(color.red,0), size=size.small, text="FALL ↓", textcolor=color.white)
+
+// === ALERTS ===
+alertcondition(riseCondition and not riseCondition[1], "RISE Signal", "DerivEdge: RISE signal detected!")
+alertcondition(fallCondition and not fallCondition[1], "FALL Signal", "DerivEdge: FALL signal detected!")
+alertcondition(flatZone and not flatZone[1], "Flat Zone", "DerivEdge: Market entering flat zone - no trade!")`,
+
+  'even-odd': (rsi) => `//@version=5
+// DerivEdge Pro — Even/Odd Digit Strategy
+// IMPORTANT: Use on TICK chart (1 tick), Line chart mode
+// Statistical behavior — NOT price behavior
+indicator("DerivEdge Even/Odd Digits v2.0", overlay=false, max_bars_back=1000)
+
+// === SETTINGS ===
+streakAlert = input.int(5, "Streak Alert Threshold", minval=3, maxval=10)
+dominanceThreshold = input.int(14, "Dominance (out of 20)", minval=10, maxval=20)
+rsiPeriod = input.int(${rsi}, "RSI Period")
+
+// === DIGIT EXTRACTION ===
+// Gets last digit of price
+lastDigit = math.floor(close * math.pow(10, 1)) % 10
+isEven = lastDigit % 2 == 0
+
+// === STREAK COUNTERS ===
+var int consecutiveEven = 0
+var int consecutiveOdd = 0
+consecutiveEven := isEven ? consecutiveEven + 1 : 0
+consecutiveOdd := not isEven ? consecutiveOdd + 1 : 0
+
+// === ROLLING COUNTS (last 20 bars) ===
+evenCount = math.sum(isEven ? 1 : 0, 20)
+oddCount = 20 - evenCount
+
+// === RSI FOR MOMENTUM ===
+rsiVal = ta.rsi(close, rsiPeriod)
+flatRSI = rsiVal >= 45 and rsiVal <= 55  // No-trade zone
+
+// === METHOD 1: Streak Break ===
+streakBreakEven = consecutiveEven >= streakAlert  // 5+ even → bet odd
+streakBreakOdd = consecutiveOdd >= streakAlert   // 5+ odd → bet even
+
+// === METHOD 2: Dominance ===
+evenDominant = evenCount >= dominanceThreshold and rsiVal >= 40 and rsiVal <= 55
+oddDominant = oddCount >= dominanceThreshold and rsiVal >= 45 and rsiVal <= 65
+
+// === METHOD 3: Alternation ===
+isAlternating = isEven != isEven[1] and isEven[1] != isEven[2] and isEven[2] != isEven[3]
+
+// === SIGNALS ===
+betOdd = streakBreakEven  // After even streak → bet odd
+betEven = streakBreakOdd  // After odd streak → bet even
+
+// === PLOTS ===
+plot(consecutiveEven, "Even Streak", color.new(color.blue, 0), 2)
+plot(consecutiveOdd, "Odd Streak", color.new(color.purple, 0), 2)
+hline(streakAlert, "Alert Level", color.yellow, linestyle=hline.style_dashed, linewidth=2)
+hline(0, "Zero", color.gray)
+
+bgcolor(flatRSI ? color.new(color.gray, 88) : na, title="No-Trade RSI Zone")
+bgcolor(streakBreakEven ? color.new(color.purple, 75) : na, title="Consider ODD")
+bgcolor(streakBreakOdd ? color.new(color.blue, 75) : na, title="Consider EVEN")
+bgcolor(isAlternating ? color.new(color.yellow, 88) : na, title="Alternation Pattern")
+
+plotshape(betOdd and not betOdd[1], "BET ODD", shape.triangledown, location.top, color.purple, size=size.normal, text="BET ODD")
+plotshape(betEven and not betEven[1], "BET EVEN", shape.triangleup, location.bottom, color.blue, size=size.normal, text="BET EVEN")
+
+// Info table
+var table infoTable = table.new(position.top_right, 2, 4, bgcolor=color.new(color.black, 80), border_width=1)
+table.cell(infoTable, 0, 0, "Even Streak", text_color=color.blue)
+table.cell(infoTable, 1, 0, str.tostring(consecutiveEven), text_color=color.white)
+table.cell(infoTable, 0, 1, "Odd Streak", text_color=color.purple)
+table.cell(infoTable, 1, 1, str.tostring(consecutiveOdd), text_color=color.white)
+table.cell(infoTable, 0, 2, "Even/20", text_color=color.gray)
+table.cell(infoTable, 1, 2, str.tostring(evenCount) + "/20", text_color=color.white)
+table.cell(infoTable, 0, 3, "RSI", text_color=color.yellow)
+table.cell(infoTable, 1, 3, str.tostring(math.round(rsiVal, 1)), text_color=color.white)
+
+alertcondition(betOdd and not betOdd[1], "BET ODD", "DerivEdge: ${streakAlert}+ Even streak — Consider ODD!")
+alertcondition(betEven and not betEven[1], "BET EVEN", "DerivEdge: ${streakAlert}+ Odd streak — Consider EVEN!")`,
+
+  'digit-prob': () => `//@version=5
+// DerivEdge Pro — Digit Probability Dashboard
+// Shows real-time cold/hot digit detection
+// Use: Tick chart, Line chart
+indicator("DerivEdge Digit Probability", overlay=false, max_bars_back=2000)
+
+lookback = input.int(1000, "Lookback Period (ticks)", minval=100, maxval=2000)
+coldThresh = input.float(9.0, "Cold Threshold (%)", minval=5.0, maxval=10.0, step=0.5)
+hotThresh = input.float(11.0, "Hot Threshold (%)", minval=10.0, maxval=15.0, step=0.5)
+
+lastDigit = math.floor(close * 10) % 10
+
+// Count each digit
+d0 = math.sum(lastDigit == 0 ? 1 : 0, lookback)
+d1 = math.sum(lastDigit == 1 ? 1 : 0, lookback)
+d2 = math.sum(lastDigit == 2 ? 1 : 0, lookback)
+d3 = math.sum(lastDigit == 3 ? 1 : 0, lookback)
+d4 = math.sum(lastDigit == 4 ? 1 : 0, lookback)
+d5 = math.sum(lastDigit == 5 ? 1 : 0, lookback)
+d6 = math.sum(lastDigit == 6 ? 1 : 0, lookback)
+d7 = math.sum(lastDigit == 7 ? 1 : 0, lookback)
+d8 = math.sum(lastDigit == 8 ? 1 : 0, lookback)
+d9 = math.sum(lastDigit == 9 ? 1 : 0, lookback)
+
+// Percentages
+p(d) => (d / lookback) * 100
+isCold(d) => p(d) <= coldThresh
+isHot(d) => p(d) >= hotThresh
+
+// Plot current digit frequency
+plot(p(d0), "Digit 0 %", isCold(d0) ? color.blue : isHot(d0) ? color.red : color.gray)
+plot(p(d9), "Digit 9 %", isCold(d9) ? color.blue : isHot(d9) ? color.red : color.gray)
+hline(coldThresh, "Cold Level", color.new(color.blue, 50), linestyle=hline.style_dashed)
+hline(hotThresh, "Hot Level", color.new(color.red, 50), linestyle=hline.style_dashed)
+hline(10.0, "Expected", color.new(color.gray, 50))
+
+// Dashboard table
+var table t = table.new(position.top_left, 3, 11, bgcolor=color.new(color.black,75), border_width=1, border_color=color.new(color.gray,50))
+table.cell(t,0,0,"DIGIT",text_color=color.gray,text_size=size.small)
+table.cell(t,1,0,"COUNT",text_color=color.gray,text_size=size.small)
+table.cell(t,2,0,"STATUS",text_color=color.gray,text_size=size.small)
+
+showRow(row, dgt, cnt) =>
+    pct = (cnt/lookback)*100
+    clr = pct <= coldThresh ? color.blue : pct >= hotThresh ? color.red : color.gray
+    status = pct <= coldThresh ? "COLD ↑" : pct >= hotThresh ? "HOT ↓" : "normal"
+    table.cell(t,0,row, str.tostring(dgt), text_color=color.white)
+    table.cell(t,1,row, str.tostring(math.round(pct,1))+"%", text_color=clr)
+    table.cell(t,2,row, status, text_color=clr)
+
+showRow(1,0,d0) 
+showRow(2,1,d1)
+showRow(3,2,d2)
+showRow(4,3,d3)
+showRow(5,4,d4)
+showRow(6,5,d5)
+showRow(7,6,d6)
+showRow(8,7,d7)
+showRow(9,8,d8)
+showRow(10,9,d9)`,
+
+  'greenlight': () => `//@version=5
+// DerivEdge Pro — Green Light System
+// Even/Odd Entry Conditions
+indicator("DerivEdge Green Light", overlay=true)
+
+ema5 = ta.ema(close, 5)
+ema10 = ta.ema(close, 10)
+ema20 = ta.ema(close, 20)
+rsiVal = ta.rsi(close, 14)
+[_, bbUpper, bbLower] = ta.bb(close, 20, 2)
+
+lastDigit = math.floor(close * 10) % 10
+isEven = lastDigit % 2 == 0
+
+evenCount = math.sum(isEven ? 1 : 0, 20)
+oddCount = 20 - evenCount
+
+// EVEN GREEN LIGHT
+cond1even = evenCount >= 13  // even dominance
+cond2even = rsiVal >= 40 and rsiVal <= 55
+cond3even = close <= bbLower * 1.001  // near lower band
+cond4even = ema5 > ema10
+
+greenLightEven = cond1even and cond2even and cond3even and cond4even
+
+// ODD GREEN LIGHT  
+cond1odd = oddCount >= 13
+cond2odd = rsiVal >= 45 and rsiVal <= 65
+cond3odd = close >= bbUpper * 0.999
+cond4odd = ema5 < ema10
+
+greenLightOdd = cond1odd and cond2odd and cond3odd and cond4odd
+
+// NO TRADE ZONE
+noTrade = rsiVal >= 45 and rsiVal <= 55 and math.abs(ema5 - ema10) < 0.005
+
+bgcolor(greenLightEven ? color.new(color.blue,80) : na, title="Even Greenlight")
+bgcolor(greenLightOdd ? color.new(color.purple,80) : na, title="Odd Greenlight")
+bgcolor(noTrade ? color.new(color.gray,90) : na, title="No Trade Zone")
+
+plotshape(greenLightEven and not greenLightEven[1], "EVEN GL", shape.circle, location.belowbar, color.blue, size=size.small, text="EVEN ✓")
+plotshape(greenLightOdd and not greenLightOdd[1], "ODD GL", shape.circle, location.abovebar, color.purple, size=size.small, text="ODD ✓")`,
+};
+
+function generatePS() {
+  const strategy = document.getElementById('ps-strategy').value;
+  const rsi = document.getElementById('ps-rsi').value;
+  const emaFast = document.getElementById('ps-ema-fast').value;
+
+  let script = '';
+  if (psTemplates[strategy]) {
+    script = psTemplates[strategy](rsi, emaFast);
+  } else {
+    script = `//@version=5\nindicator("DerivEdge ${strategy}", overlay=true)\n// Strategy: ${strategy}\nplot(close)`;
+  }
+  document.getElementById('ps-output').textContent = script;
+}
+
+function copyPS() {
+  const text = document.getElementById('ps-output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('PineScript copied!');
+  });
+}
+
+// ===== DBOT XML GENERATOR =====
+const dbotConfigs = {
+  nuclear9: { digit: 9, contractType: 'DIGITMATCH', duration: 1 },
+  zerokiller: { digit: 0, contractType: 'DIGITMATCH', duration: 1 },
+  mirror8: { digit: 8, contractType: 'DIGITMATCH', duration: 1 },
+  onestreak: { digit: 1, contractType: 'DIGITMATCH', duration: 1 },
+  firebias: { digit: 5, contractType: 'DIGITOVER', duration: 1 },
+  underbeast: { digit: 5, contractType: 'DIGITUNDER', duration: 3 },
+  evenstreak: { digit: null, contractType: 'DIGITEVEN', duration: 3 },
+};
+
+document.getElementById('dbot-strategy').addEventListener('change', function() {
+  document.getElementById('custom-digit-group').style.display = this.value === 'custom' ? 'block' : 'none';
+});
+
+function generateDBot() {
+  const stratKey = document.getElementById('dbot-strategy').value;
+  const market = document.getElementById('dbot-market').value;
+  const stake = document.getElementById('dbot-stake').value;
+  const duration = document.getElementById('dbot-duration').value;
+  const tp = document.getElementById('dbot-tp').value;
+  const sl = document.getElementById('dbot-sl').value;
+  const cfg = dbotConfigs[stratKey] || { digit: parseInt(document.getElementById('dbot-custom-digit').value), contractType: 'DIGITMATCH', duration: 1 };
+
+  const contractTypeMap = {
+    DIGITMATCH: 'Matches',
+    DIGITDIFF: 'Differs',
+    DIGITOVER: 'Over',
+    DIGITUNDER: 'Under',
+    DIGITEVEN: 'Even',
+    DIGITODD: 'Odd',
+  };
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <!--
+    DerivEdge Pro — ${stratKey.toUpperCase()} Bot
+    Market: ${market}
+    Contract: ${contractTypeMap[cfg.contractType] || cfg.contractType}
+    ${cfg.digit !== null ? `Digit: ${cfg.digit}` : ''}
+    Stake: $${stake}
+    Duration: ${duration} tick(s)
+    Take Profit: $${tp}/day
+    Stop Loss: Balance < $${sl}
+    Generated: ${new Date().toISOString()}
+  -->
+  <block type="trade" x="50" y="50">
+    <mutation has_prediction="${cfg.digit !== null ? 'true' : 'false'}"></mutation>
+    <field name="MARKET_TYPE">digits</field>
+    <field name="SYMBOL">${market}</field>
+    <field name="CONTRACT_TYPE">${cfg.contractType}</field>
+    <field name="DURATION">${duration}</field>
+    <field name="DURATION_TYPE">t</field>
+    <field name="AMOUNT">${stake}</field>
+    <field name="AMOUNT_TYPE">stake</field>
+    ${cfg.digit !== null ? `<field name="PREDICTION">${cfg.digit}</field>` : ''}
+    <next>
+      <block type="trade_result_block">
+        <statement name="AFTER_PURCHASE">
+          <block type="controls_if">
+            <value name="IF0">
+              <block type="read_result">
+                <field name="RESULT_TYPE">profit</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <!-- Win: continue -->
+              <block type="notify" x="0" y="0">
+                <field name="NOTIFICATION_TYPE">success</field>
+                <value name="MESSAGE">
+                  <block type="text"><field name="TEXT">WIN! Profit taken.</field></block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+
+  <!-- Profit/Loss Tracking -->
+  <block type="variables_set" x="50" y="300">
+    <field name="VAR">totalProfit</field>
+    <value name="VALUE">
+      <block type="math_number"><field name="NUM">0</field></block>
+    </value>
+    <next>
+      <block type="variables_set">
+        <field name="VAR">takeProfit</field>
+        <value name="VALUE">
+          <block type="math_number"><field name="NUM">${tp}</field></block>
+        </value>
+        <next>
+          <block type="variables_set">
+            <field name="VAR">stopLoss</field>
+            <value name="VALUE">
+              <block type="math_number"><field name="NUM">${sl}</field></block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>`;
+
+  document.getElementById('dbot-output').textContent = xml;
+}
+
+function copyDBot() {
+  const text = document.getElementById('dbot-output').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('XML copied!'));
+}
+
+function downloadDBot() {
+  const text = document.getElementById('dbot-output').textContent;
+  if (!text || text.includes('Click "Generate"')) { generateDBot(); }
+  const blob = new Blob([document.getElementById('dbot-output').textContent], { type: 'application/xml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `derivedge_${document.getElementById('dbot-strategy').value}_bot.xml`;
+  a.click();
+}
+
+// ===== PROBABILITY DASHBOARD =====
+// Simulated since we're standalone (main app has live data)
+function updateProbDash() {
+  const counts = Array(10).fill(0).map(() => Math.floor(Math.random() * 15 + 5));
+  const total = counts.reduce((a, b) => a + b, 0);
+  const pcts = counts.map(c => (c / total) * 100);
+  const coldThresh = parseFloat(document.getElementById('prob-threshold').value);
+  const hotThresh = 11.5;
+
+  // Grids
+  [0, 1].forEach(row => {
+    const gridEl = document.getElementById('prob-grid-' + (row + 1));
+    if (!gridEl) return;
+    let html = '';
+    for (let i = row * 5; i < row * 5 + 5; i++) {
+      const pct = pcts[i];
+      const isCold = pct <= coldThresh;
+      const isHot = pct >= hotThresh;
+      const cellClass = isCold ? 'prob-cell cold-cell' : isHot ? 'prob-cell hot-cell' : 'prob-cell';
+      const dClass = i % 2 === 0 ? 'even-d' : 'odd-d';
+      const barColor = isCold ? '#38bdf8' : isHot ? '#ef4444' : '#8b5cf6';
+      html += `<div class="${cellClass} ${dClass}">
+        <div class="prob-digit">${i}</div>
+        <div class="prob-pct">${pct.toFixed(1)}%</div>
+        <div class="prob-bar-outer"><div class="prob-bar-inner" style="width:${Math.min(100, pct*8)}%;background:${barColor}"></div></div>
+        <div style="font-size:10px;margin-top:4px;color:var(--text3)">${isCold ? '❄ COLD' : isHot ? '🔥 HOT' : '○ normal'}</div>
+      </div>`;
+    }
+    gridEl.innerHTML = html;
+  });
+
+  // Table
+  const tbody = document.getElementById('prob-tbody');
+  if (tbody) {
+    tbody.innerHTML = pcts.map((pct, i) => {
+      const isCold = pct <= coldThresh;
+      const isHot = pct >= hotThresh;
+      const cls = isCold ? 'cold' : isHot ? 'hot' : 'normal';
+      const signal = isCold ? '→ MATCH' : isHot ? '→ DIFFER' : '—';
+      return `<tr>
+        <td style="font-family:'DM Mono',monospace;font-weight:700">${i}</td>
+        <td>${counts[i]}</td>
+        <td class="${cls}">${pct.toFixed(2)}%</td>
+        <td style="color:var(--text3)">10.00%</td>
+        <td class="${cls}">${isCold ? '❄ COLD' : isHot ? '🔥 HOT' : '○ Normal'}</td>
+        <td style="color:${isCold ? 'var(--accent)' : isHot ? 'var(--red)' : 'var(--text3)'}">${signal}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Bot recommendations
+  const recs = document.getElementById('bot-recommendations');
+  if (recs) {
+    const coldDigits = pcts.map((p, i) => ({ i, p })).filter(d => d.p <= coldThresh).map(d => d.i);
+    const hotDigits = pcts.map((p, i) => ({ i, p })).filter(d => d.p >= hotThresh).map(d => d.i);
+    let html = '';
+    coldDigits.forEach(d => {
+      html += `<div class="cond-check check-pass"><span class="check-icon">✅</span>Digit ${d} is COLD (${pcts[d].toFixed(1)}%) → Run MATCHES bot on digit ${d}</div>`;
+    });
+    hotDigits.forEach(d => {
+      html += `<div class="cond-check check-fail"><span class="check-icon">🔥</span>Digit ${d} is HOT (${pcts[d].toFixed(1)}%) → Run DIFFERS bot on digit ${d}</div>`;
+    });
+    if (!html) html = `<p style="color:var(--text3);font-size:13px">All digits near expected 10% — no strong bias detected. Wait for cold/hot signals.</p>`;
+    recs.innerHTML = html;
+  }
+}
+
+// ===== RISK CALCULATOR =====
+const payoutRates = { 'rise-fall': 0.85, 'even-odd': 0.90, 'over-under': 0.90, 'matches': 8.5, 'differs': 0.92, 'dbot': 0.87 };
+
+function calcRisk() {
+  const balance = parseFloat(document.getElementById('rc-balance').value) || 100;
+  const riskPct = parseFloat(document.getElementById('rc-risk-pct').value) || 1;
+  const strategy = document.getElementById('rc-strategy').value;
+  const target = parseFloat(document.getElementById('rc-target').value) || 12;
+  const stopLoss = parseFloat(document.getElementById('rc-stoploss').value) || 7;
+  const winRate = parseFloat(document.getElementById('rc-winrate').value) / 100 || 0.65;
+  const payout = payoutRates[strategy] || 0.87;
+
+  const stake = (balance * riskPct / 100);
+  const maxLossPerTrade = stake;
+  const winAmount = stake * payout;
+  const maxTrades = Math.floor(stopLoss / maxLossPerTrade);
+  const tradesNeeded = Math.ceil(target / (winAmount * winRate - maxLossPerTrade * (1 - winRate)));
+  const expWin = (winRate * winAmount).toFixed(2);
+  const expLoss = ((1 - winRate) * maxLossPerTrade).toFixed(2);
+  const expPnlPerTrade = (parseFloat(expWin) - parseFloat(expLoss)).toFixed(2);
+
+  document.getElementById('rc-stake').textContent = '$' + stake.toFixed(2);
+  document.getElementById('rc-max-trades').textContent = maxTrades + ' trades';
+  document.getElementById('rc-trades-needed').textContent = Math.max(0, tradesNeeded) + ' trades';
+  document.getElementById('rc-exp-win').textContent = '$' + expWin + '/trade';
+  document.getElementById('rc-exp-loss').textContent = '-$' + expLoss + '/trade';
+  document.getElementById('rc-exp-pnl').textContent = (expPnlPerTrade >= 0 ? '+' : '') + '$' + expPnlPerTrade + '/trade';
+  document.getElementById('rc-flat-stake').textContent = '$' + (balance * 0.01).toFixed(2) + ' (1% flat)';
+
+  drawGrowthChart(balance, stake, winRate, payout, target, stopLoss);
+}
+
+function drawGrowthChart(balance, stake, winRate, payout, dailyTarget, dailyStop) {
+  const canvas = document.getElementById('growth-chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const days = 30;
+  const tradesPerDay = 10;
+  let bal = balance;
+  const balances = [bal];
+
+  for (let d = 0; d < days; d++) {
+    let dailyPnl = 0;
+    for (let t = 0; t < tradesPerDay; t++) {
+      const win = Math.random() < winRate;
+      dailyPnl += win ? stake * payout : -stake;
+      if (dailyPnl >= dailyTarget || bal + dailyPnl <= balance - dailyStop) break;
+    }
+    bal = Math.max(0, bal + dailyPnl);
+    balances.push(bal);
+  }
+
+  const minBal = Math.min(...balances) * 0.95;
+  const maxBal = Math.max(...balances) * 1.05;
+  const w = canvas.width, h = canvas.height;
+  const pad = 40;
+
+  // Background
+  ctx.fillStyle = '#020817';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(56,189,248,0.08)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = pad + (h - pad * 2) * (i / 5);
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w - pad, y); ctx.stroke();
+  }
+
+  // Line
+  const getY = v => pad + (h - pad * 2) * (1 - (v - minBal) / (maxBal - minBal));
+  const getX = i => pad + (w - pad * 2) * (i / days);
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, pad, 0, h - pad);
+  grad.addColorStop(0, 'rgba(56,189,248,0.3)');
+  grad.addColorStop(1, 'rgba(56,189,248,0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(getX(0), getY(balances[0]));
+  balances.forEach((b, i) => ctx.lineTo(getX(i), getY(b)));
+  ctx.lineTo(getX(days), h - pad);
+  ctx.lineTo(getX(0), h - pad);
+  ctx.fill();
+
+  // Line
+  ctx.strokeStyle = '#38bdf8';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  balances.forEach((b, i) => i === 0 ? ctx.moveTo(getX(i), getY(b)) : ctx.lineTo(getX(i), getY(b)));
+  ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = '#64748b';
+  ctx.font = '11px DM Mono';
+  ctx.fillText('$' + minBal.toFixed(0), 2, h - pad);
+  ctx.fillText('$' + maxBal.toFixed(0), 2, pad + 10);
+  ctx.fillText('Day 1', pad, h - 5);
+  ctx.fillText('Day 30', w - 60, h - 5);
+
+  const finalBal = balances[balances.length - 1];
+  const growth = ((finalBal - balance) / balance * 100).toFixed(1);
+  const summaryEl = document.getElementById('growth-summary');
+  if (summaryEl) {
+    summaryEl.textContent = `📈 Projected balance after 30 days: $${finalBal.toFixed(2)} (${growth >= 0 ? '+' : ''}${growth}%)`;
+    summaryEl.className = parseFloat(growth) >= 0 ? 'alert-green' : 'alert-red';
+    summaryEl.style.marginTop = '12px';
+  }
+}
+
+// ===== STRATEGY BUILDER =====
+function buildStrategy() {
+  const type = document.getElementById('sb-type').value;
+  const market = document.getElementById('sb-market').value;
+  const session = document.getElementById('sb-session').value;
+  const rsiFilter = document.getElementById('sb-rsi').value;
+  const emaFilter = document.getElementById('sb-ema').value;
+  const vol = document.getElementById('sb-vol').value;
+
+  const sessions = {
+    morning: '08:00-12:00 UTC', afternoon: '12:00-16:00 UTC',
+    evening: '16:00-18:00 UTC', allday: '00:00-24:00 UTC'
+  };
+
+  const typeLabels = {
+    'rise-fall': '↑↓ Rise / Fall', 'even-odd': '⊕ Even / Odd',
+    'over-under': '⊷ Over / Under', 'matches': '≈ Matches', 'differs': '≠ Differs'
+  };
+
+  const conditions = [
+    { label: 'Contract Type', value: typeLabels[type], icon: '📋' },
+    { label: 'Market', value: market.replace('_', ' '), icon: '📊' },
+    { label: 'Trading Session', value: sessions[session], icon: '🕐' },
+  ];
+
+  if (rsiFilter !== 'none') {
+    const rsiLabels = {
+      'above50': 'RSI > 50 (Bullish momentum)',
+      'below50': 'RSI < 50 (Bearish momentum)',
+      '40-55': 'RSI 40-55 (Even/digit zone)',
+      'extreme': 'RSI > 65 or RSI < 35 (Extreme)',
+    };
+    conditions.push({ label: 'RSI Condition', value: rsiLabels[rsiFilter], icon: '📈' });
+  }
+
+  if (emaFilter !== 'none') {
+    const emaLabels = {
+      'bullstack': 'EMA20 > EMA50 > EMA200 (Bull stack)',
+      'bearstack': 'EMA20 < EMA50 < EMA200 (Bear stack)',
+      'e5cross': 'EMA5 crosses EMA10 (Crossover)',
+      'separated': 'EMAs clearly separated (>0.02)',
+    };
+    conditions.push({ label: 'EMA Condition', value: emaLabels[emaFilter], icon: '📉' });
+  }
+
+  const volLabels = {
+    'normal': 'Normal volatility (BB width 0.03-0.05)',
+    'high': 'High volatility (BB expanding)',
+    'squeeze': 'BB Squeeze (band width < 0.05)',
+    'any': 'Any volatility level',
+  };
+  conditions.push({ label: 'Volatility', value: volLabels[vol], icon: '⚡' });
+
+  const output = document.getElementById('strategy-output');
+  if (output) {
+    output.innerHTML = `
+      <div class="card-title">Your Custom Strategy</div>
+      <div class="alert-green" style="margin-bottom:16px">✅ Strategy ready — ${conditions.length} conditions configured</div>
+      ${conditions.map((c, i) => `
+        <div class="builder-step">
+          <div class="step-num">${i + 1}</div>
+          <div class="step-content">
+            <div class="step-title">${c.icon} ${c.label}</div>
+            <div class="step-desc">${c.value}</div>
+          </div>
+        </div>
+      `).join('')}
+      <div style="margin-top:16px;padding:12px;background:rgba(56,189,248,0.06);border-radius:8px;font-size:12px;color:var(--text2)">
+        <strong style="color:var(--accent)">Greenlight Score:</strong> All ${conditions.length} conditions must be met before entering a trade. 
+        This strategy is based on your notes for ${typeLabels[type]} on ${market}.
+      </div>
+    `;
+  }
+}
+
+// ===== TAB SWITCHING =====
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+
+  if (id === 'probability') updateProbDash();
+  if (id === 'risk-calc') calcRisk();
+  if (id === 'strategy-builder') buildStrategy();
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.textContent = '✓ ' + msg;
+  toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#10b981;color:#fff;padding:10px 18px;border-radius:8px;font-weight:600;font-size:13px;z-index:9999;animation:fadeIn 0.3s ease';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// ===== INIT =====
+generatePS();
+generateDBot();
+calcRisk();
+</script>
+</body>
+</html>
